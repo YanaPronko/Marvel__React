@@ -1,43 +1,25 @@
-import {useState } from "react";
-
+import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import AppHeader from "../appHeader/AppHeader";
-import RandomChar from "../randomChar/RandomChar";
-import CharList from "../charList/CharList";
-import CharInfo from "../charInfo/CharInfo";
-import ErrorBoundary from "../errorBoundary/ErrorBoundary";
-
-import decoration from "../../resources/img/vision.png";
-import ComicsList from "../comicsList/ComicsList";
-import AppBanner from "../appBanner/AppBanner";
+import { MainPage, ComicsPage } from '../pages';
 
 const App = () => {
-  // const [selectedChar, setChar] = useState(null);
-
-  /* const onSelectedChar = (id) => {
-    setChar(id);
-  }; */
   return (
-    <div className="app">
-      <AppHeader />
-      <main>
-        {/* <ErrorBoundary>
-          <RandomChar />
-        </ErrorBoundary>
-        <div className="char__content">
-          <ErrorBoundary>
-            <CharList onSelectedChar={onSelectedChar} />
-          </ErrorBoundary>
-          <ErrorBoundary>
-            <CharInfo charId={selectedChar} />
-          </ErrorBoundary>
-        </div>
-        <img className="bg-decoration" src={decoration} alt="vision" /> */}
-        <ErrorBoundary>
-          <AppBanner/>
-          <ComicsList />
-        </ErrorBoundary>
-      </main>
-    </div>
+    <Router>
+      <div className="app">
+        <AppHeader />
+        <main>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="comics" element={<ComicsPage />} />
+            {/* Если нужны составные пути(вложенные), то тогда внутрь еще один Route */}
+          </Routes>
+        </main>
+        {/* Компонент <Outlet/> используется для рендеринга подкомпонента(вложенного) как плейсхолдер
+        который при клике на что-то будет замещаться нужным содержимым
+        The <Outlet> renders the current route selected.
+        никаких доп реквизитов не нужно*/}
+      </div>
+    </Router>
   );
 };
 

@@ -169,7 +169,7 @@ const CharList = (props) => {
 
     const items = view(chars);
     const errorMes = error ? <ErrorMessage /> : null;
-  const spinner = loading && !newItemLoading ? <Spiner /> : null;
+    const spinner = loading && !newItemLoading ? <Spiner /> : null;
 
   //В классовых компонентах это условие нормально работает тк. там каждый раз не пересоздается
   // content - это свойство класса, которое не пересоздавалось, а просто изменялось,
