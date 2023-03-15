@@ -1,7 +1,7 @@
-import { Component } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/MarvelService";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 import Spiner from "../spinner/Spinner";
 import Skeleton from "../skeleton/Skeleton";
@@ -9,19 +9,28 @@ import Skeleton from "../skeleton/Skeleton";
 import "./charInfo.scss";
 
 
-class CharInfo extends Component {
-  state = {
+const CharInfo = (props) => {
+  const [char, setChar] = useState(null);
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(false);
+  /* state = {
     char: null,
     loading: false,
     error: false,
-  };
+  }; */
 
-	marvelService = new MarvelService();
+  // const marvelService = new MarvelService();
+ const { loading, error, getCharacter, clearError} = useMarvelService();
 
-	componentDidMount() { // хук, который срабатывает в самом начале загрузки приложения
-		this.updateChar();
-	}
+  useEffect(() => {
+    updateChar();
+  }, [props.charId]);
 
+	// componentDidMount() { // хук, который срабатывает в самом начале загрузки приложения
+	// 	this.updateChar();
+	// }
+
+ /*
 	componentDidUpdate(prevProps, prevState) { // хук, который срабатывает при изменении state или props,
 																						// данного компонента, каждый перерендер - вызывает этот хук
 																						//  можно попасть в бесконечный цикл
@@ -30,46 +39,50 @@ class CharInfo extends Component {
 			this.updateChar();
 		}
 		// this.updateChar();
-	}
+	} */
 
-  onCharLoading = () => {
-    this.setState({
-      loading: true,
-    });
-  };
-  onCharLoaded = (char) => {
-    this.setState({
-      char,
-      loading: false,
-    });
-  };
+  // const onCharLoading = () => {
+  //   setLoading(true);
+  //   // this.setState({
+  //   //   loading: true,
+  //   // });
+  // };
+  const onCharLoaded = (char) => {
+    setChar(() => char);
+    // setLoading(false);
 
-  onError = () => {
-    this.setState({
-      loading: false,
-      error: true,
-    });
+    // this.setState({
+    //   char,
+    //   loading: false,
+    // });
   };
 
-  updateChar = () => {
-		const { charId } = this.props;
+  // const onError = () => {
+  //   setError(true);
+  //   setLoading(false);
+  //   // this.setState({
+  //   //   loading: false,
+  //   //   error: true,
+  //   // });
+  // };
+
+  const updateChar = () => {
+		const { charId } = props;
 		if (!charId) return;
 
-    this.onCharLoading();
-    this.marvelService
-      .getCharacter(charId)
-      .then(this.onCharLoaded)
-      .catch(this.onError);
+    // onCharLoading();
+    // marvelService
+    //   .getCharacter(charId)
+    //   .then(onCharLoaded)
+    //   .catch(onError);
+    clearError();
+    getCharacter(charId).then(onCharLoaded);
   };
-
-	render() {
-		const { char, loading, error } = this.state;
 
 		const skeleton = char || loading || error ? null : <Skeleton />;
 		const errorMes = error ? <ErrorMessage /> : null;
     const spinner = loading ? <Spiner /> : null;
     const content = !(error || loading || !char) ? <View char={char}/> : null;
-
 
     return (
 			<div className="char__info">
@@ -79,7 +92,6 @@ class CharInfo extends Component {
 				{content}
       </div>
     );
-  }
 }
 
 const View = ({ char }) => {
