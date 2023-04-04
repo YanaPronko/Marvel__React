@@ -20,7 +20,21 @@ const CharInfo = (props) => {
   }; */
 
   // const marvelService = new MarvelService();
- const { loading, error, getCharacter, clearError} = useMarvelService();
+  const { loading, error, getCharacter, clearError } = useMarvelService();
+
+  const updateChar = () => {
+    const { charId } = props;
+    if (!charId) return;
+
+    // onCharLoading();
+    // marvelService
+    //   .getCharacter(charId)
+    //   .then(onCharLoaded)
+    //   .catch(onError);
+    clearError();
+    getCharacter(charId).then(onCharLoaded);
+  };
+
 
   useEffect(() => {
     updateChar();
@@ -66,18 +80,6 @@ const CharInfo = (props) => {
   //   // });
   // };
 
-  const updateChar = () => {
-		const { charId } = props;
-		if (!charId) return;
-
-    // onCharLoading();
-    // marvelService
-    //   .getCharacter(charId)
-    //   .then(onCharLoaded)
-    //   .catch(onError);
-    clearError();
-    getCharacter(charId).then(onCharLoaded);
-  };
 
 		const skeleton = char || loading || error ? null : <Skeleton />;
 		const errorMes = error ? <ErrorMessage /> : null;

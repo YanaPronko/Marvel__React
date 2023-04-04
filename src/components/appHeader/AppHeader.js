@@ -2,10 +2,13 @@ import { Link, NavLink} from "react-router-dom";
 import './appHeader.scss';
 
 const AppHeader = () => {
-    return (
+  const path = window.location.pathname === '/' ? "main page" : window.location.pathname.slice(1);
+    return (<>
       <header className="app__header">
+        {<h2>Now on the {path}</h2>}
+        
         <h1 className="app__title">
-          <Link exact to="/">
+          <Link to="/">
             <span>Marvel</span> information portal
           </Link>
         </h1>
@@ -17,7 +20,8 @@ const AppHeader = () => {
                 style={({ isActive }) => ({
                   color: isActive ? "#9F0013" : "#000000",
                 })}
-                to="/">
+                to="/"
+              >
                 Characters
               </NavLink>
             </li>
@@ -28,14 +32,16 @@ const AppHeader = () => {
                 style={({ isActive }) => ({
                   color: isActive ? "#9F0013" : "#000000",
                 })}
-                to="/comics">
+                to="/comics"
+              >
                 Comics
               </NavLink>
             </li>
           </ul>
         </nav>
       </header>
-    );
+    </>
+  );
 }
 
 export default AppHeader;

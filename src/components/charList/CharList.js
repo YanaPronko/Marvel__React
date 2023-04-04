@@ -6,6 +6,7 @@ import ErrorMessage from "../errorMessage/ErrorMessage";
 import Spiner from "../spinner/Spinner";
 
 import "./charList.scss";
+import { logger } from "./DynamicImports";
 
 
 const CharList = (props) => {
@@ -37,15 +38,19 @@ const CharList = (props) => {
   } */
 
 
-  const onCharsLoaded = (newChars) => {
+  const onCharsLoaded = async (newChars) => {
     let ended = false;
-    if (newChars.length < 9) {
+    if (newChars.length < 6) {
       ended = true;
     }
+    const { secondLogger } = await import('./DynamicImports');
+    secondLogger();
+
     setChars((chars) => [...chars, ...newChars]);
     setNewItemLoading(false);
     setOffset(offset => offset + 9);
     setCharsEnded(charsEnded => ended);
+    setPageEnded(false)
 
     /* this.setState(({ chars, offset, charsEnded }) => ({
       chars: [...chars, ...newChars],
@@ -92,7 +97,7 @@ const CharList = (props) => {
 
   useEffect(() => {
     if (pageEnded && !newItemLoading && !charsEnded) {
-      updateCharsList(offset);
+      updateCharsList(offset, false);
     }
   }, [pageEnded]);
 
@@ -176,6 +181,12 @@ const CharList = (props) => {
   // а в функциональных компонентах каждый раз переоздается => перерисовывается ????
   // из-за этого контент прыгает
     // const content = !(error || loading) ? items : null;
+
+  if (loading) {
+    import('./DynamicImports')
+      .then(obj => obj.default())
+      .catch();
+  }
 
     return (
       <div className="char__list">
